@@ -1,23 +1,15 @@
 import { invoke } from "@tauri-apps/api/core";
-import { emit, listen } from "@tauri-apps/api/event";
+import { listen } from "@tauri-apps/api/event";
 
 async function greet() {
-	console.log("calling greet");
-	const resp = await invoke("greet");
-	console.log(resp);
-	throw new Error("hello");
+	await invoke("greet");
 }
 
-setInterval(() => {
-	greet();
-}, 50);
-
 listen("hello", () => {
-	emit("bye");
+	console.log("received event")
+	greet()
 });
 
 window.onunhandledrejection = (ev) => {
 	console.error("Uncaught in promise", ev);
 };
-
-// greet();
